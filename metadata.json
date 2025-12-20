@@ -1,0 +1,7 @@
+{
+  "name": "Madhusudan Group - Lead Intelligence",
+  "description": "Enterprise inquiry and visiting card data extraction tool for Madhusudan Group sales professionals.",
+  "requestFramePermissions": [
+    "camera"
+  ]
+}
