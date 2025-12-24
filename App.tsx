@@ -64,11 +64,11 @@ const App: React.FC = () => {
     }
   };
 
-  const handleCapture = async (base64: string) => {
+  const handleCapture = async (images: string[]) => {
     setStatus('extracting');
     setError(null);
     try {
-      const extracted = await extractInquiryData(base64);
+      const extracted = await extractInquiryData(images);
       const newRecord = {
         ...extracted,
         id: crypto.randomUUID(),
@@ -80,7 +80,7 @@ const App: React.FC = () => {
       setTimeout(() => setStatus('idle'), 2000);
     } catch (err: any) {
       console.error(err);
-      setError("Failed to extract data. Please try a clearer photo.");
+      setError("Failed to extract data. Please try clearer photos.");
       setStatus('error');
     }
   };
@@ -104,7 +104,7 @@ const App: React.FC = () => {
   }).length;
 
   return (
-    <div className="min-h-screen bg-[#F8FAFC] pb-24">
+    <div className="min-h-screen bg-[#F8FAFC] pb-24 font-sans">
       {/* Corporate Header */}
       <header className="bg-white border-b border-slate-200 sticky top-0 z-40 shadow-sm">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between">
@@ -118,7 +118,7 @@ const App: React.FC = () => {
               <h1 className="text-lg font-black text-slate-900 tracking-tight leading-none uppercase truncate">Madhusudan</h1>
               <div className="flex items-center gap-2 mt-1">
                 <span className="flex h-2 w-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Profile: {user.email}</p>
+                <p className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Agent: {user.email}</p>
               </div>
             </div>
           </div>
@@ -128,7 +128,7 @@ const App: React.FC = () => {
             <div className="hidden md:flex items-center gap-4">
               <div className="text-right">
                 <p className="text-sm font-bold text-slate-900">{user.fullName}</p>
-                <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">Authorized Agent</p>
+                <p className="text-[10px] text-indigo-600 font-bold uppercase tracking-wider">Lead Intelligence Agent</p>
               </div>
               <button 
                 onClick={handleLogout}
@@ -158,7 +158,7 @@ const App: React.FC = () => {
               <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
               </svg>
-              New Scan
+              Initiate Scan
             </button>
           </div>
         </div>
@@ -187,7 +187,7 @@ const App: React.FC = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 4v16m8-8H4" />
                 </svg>
-                Capture New Lead
+                New Multi-Side Scan
               </button>
               <button 
                 onClick={handleLogout}
@@ -196,13 +196,13 @@ const App: React.FC = () => {
                 <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                   <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1" />
                 </svg>
-                Logout from Profile
+                Logout Account
               </button>
               <button 
                 onClick={() => setIsMobileMenuOpen(false)}
                 className="w-full py-4 text-slate-400 font-bold hover:text-slate-600"
               >
-                Cancel
+                Close
               </button>
             </div>
           </div>
@@ -213,32 +213,30 @@ const App: React.FC = () => {
       <div className="bg-white border-b border-slate-200 pt-8 pb-10">
         <div className="max-w-7xl mx-auto px-4 sm:px-6">
           <div className="mb-8">
-            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Welcome, {user.fullName.split(' ')[0]}</h2>
-            <p className="text-slate-500 font-medium mt-1">Here is your lead capture performance for Madhusudan Group.</p>
+            <h2 className="text-3xl font-black text-slate-900 tracking-tight">Lead Console</h2>
+            <p className="text-slate-500 font-medium mt-1">Combine multiple photos for comprehensive data extraction.</p>
           </div>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6">
             <div className="bg-[#F8FAFC] p-6 rounded-[24px] border border-slate-100">
-              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Total Leads</p>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Total Records</p>
               <p className="text-3xl font-black text-slate-900 mt-1">{totalLeads}</p>
             </div>
             <div className="bg-[#F8FAFC] p-6 rounded-[24px] border border-slate-100">
-              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Today</p>
+              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Scanned Today</p>
               <p className="text-3xl font-black text-slate-900 mt-1 text-emerald-600">+{todayLeads}</p>
             </div>
-            <div className="hidden md:block bg-[#F8FAFC] p-6 rounded-[24px] border border-slate-100">
-              <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">Storage Status</p>
-              <p className="text-lg font-bold text-slate-900 mt-2">Local Profile</p>
-              <div className="mt-1 h-1 w-full bg-slate-200 rounded-full overflow-hidden">
-                <div className="h-full bg-indigo-600 w-3/4"></div>
-              </div>
-            </div>
             <div className="hidden md:block bg-indigo-900 p-6 rounded-[24px] text-white shadow-xl shadow-indigo-100">
-              <p className="text-indigo-300 text-[10px] font-bold uppercase tracking-widest">Cloud Sync</p>
+              <p className="text-indigo-300 text-[10px] font-bold uppercase tracking-widest">Status</p>
               <p className="text-lg font-bold mt-2 flex items-center gap-2">
                 <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-                Active
+                Secure Session
               </p>
-              <p className="text-[10px] text-indigo-200 mt-1 opacity-60">Verified Credentials</p>
+              <p className="text-[10px] text-indigo-200 mt-1 opacity-60">Verified {user.email}</p>
+            </div>
+            <div className="hidden md:block bg-[#F8FAFC] p-6 rounded-[24px] border border-slate-100">
+               <p className="text-slate-400 text-[10px] font-bold uppercase tracking-widest">AI Multi-Scan</p>
+               <p className="text-lg font-bold text-slate-900 mt-2">Active</p>
+               <p className="text-[10px] text-slate-400 mt-1">Supports Front/Back Cards</p>
             </div>
           </div>
         </div>
@@ -277,9 +275,9 @@ const App: React.FC = () => {
       </div>
 
       <footer className="mt-20 py-12 border-t border-slate-200 text-center px-4">
-        <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-3">Madhusudan Group • Global Lead Intel</p>
+        <p className="text-xs font-bold text-slate-400 uppercase tracking-[0.2em] mb-3">Madhusudan Group • AI Solutions</p>
         <p className="text-slate-300 text-[10px] leading-relaxed max-w-xs mx-auto">
-          Confidential enterprise data. Data is persisted to your unique agent profile based on your work email.
+          Confidential enterprise data. Your captures are unique to your email profile across this device.
         </p>
       </footer>
 
@@ -291,13 +289,15 @@ const App: React.FC = () => {
       )}
 
       {status === 'extracting' && (
-        <div className="fixed inset-0 z-[100] bg-slate-900/80 backdrop-blur-md flex flex-col items-center justify-center text-center p-6 text-white">
+        <div className="fixed inset-0 z-[100] bg-slate-900/90 backdrop-blur-xl flex flex-col items-center justify-center text-center p-6 text-white">
           <div className="w-24 h-24 mb-10 relative">
             <div className="absolute inset-0 border-[6px] border-white/10 rounded-full"></div>
-            <div className="absolute inset-0 border-[6px] border-indigo-500 rounded-full border-t-transparent animate-spin shadow-lg shadow-indigo-500/50"></div>
+            <div className="absolute inset-0 border-[6px] border-indigo-500 rounded-full border-t-transparent animate-spin shadow-[0_0_20px_rgba(99,102,241,0.5)]"></div>
           </div>
-          <h2 className="text-3xl font-black tracking-tight mb-3">AI Processing...</h2>
-          <p className="text-indigo-200 max-w-xs font-medium text-lg">Extracting Madhusudan Group business intelligence.</p>
+          <h2 className="text-3xl font-black tracking-tight mb-3">Analyzing Photos...</h2>
+          <p className="text-indigo-200 max-w-xs font-medium text-lg leading-relaxed">
+            Gemini is merging data from multiple images into your profile.
+          </p>
         </div>
       )}
     </div>
